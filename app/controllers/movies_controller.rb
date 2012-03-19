@@ -7,13 +7,19 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @sorted_by = ""
+    @checked_ratings = {}
+    filter = {}
     if params.has_key?(:sort_by)
       @sorted_by = params[:sort_by]
-      @movies = Movie.find(:all, :order => @sorted_by)
-    else
-      @sorted_by = ""
-      @movies = Movie.all
     end
+    if params.has_key?(:ratings)
+      @checked_ratings = params[:ratings]
+      filter[:rating] = @checked_ratings.keys
+    else
+    end
+    @movies = Movie.find(:all, :conditions => filter, :order => @sorted_by)
+    @all_ratings = Movie.ratings()
   end
 
   def new

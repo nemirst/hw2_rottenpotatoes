@@ -11,4 +11,10 @@ module MoviesHelper
   def rating_checked?(rating, ratings_checked)
     ratings_checked.has_key?(rating)
   end
+  
+  def hidden_field_if(name, value)
+    if not value.empty?
+      hidden_field_tag name, value
+    end
+  end
 end

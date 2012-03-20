@@ -5,7 +5,8 @@
   Include: 
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", "ratings[#{rating}]", rating_checked?(rating, @checked_ratings)
+    = check_box_tag "ratings[#{rating}]", "", rating_checked?(rating, @checked_ratings)
+  = hidden_field_if(:sort_by, @sorted_by)
   = submit_tag 'Refresh', :id => 'ratings_submit'
 
 %table#movies

@@ -16,8 +16,24 @@ class MoviesController < ApplicationController
     if params.has_key?(:ratings)
       @checked_ratings = params[:ratings]
       filter[:rating] = @checked_ratings.keys
-    else
     end
+    
+    if @checked_ratings.empty? and not (params.has_key?(:commit) and params[:commit] == 'Refresh')
+      redirect_params = {}
+      if session.has_key?(:ratings) and not session[:ratings].empty?
+        redirect_params[:ratings] = session[:ratings]
+      end
+      if session.has_key?(:sort_by) and not session[:sort_by] == ''
+        redirect_params[:sort_by] = session[:sort_by]
+      end
+      if not redirect_params.empty?
+        redirect_params[:action] = 'index'
+        redirect_to(redirect_params)
+      end      
+    end
+
+    session[:ratings] = @checked_ratings  
+    session[:sort_by] = @sorted_by
     @movies = Movie.find(:all, :conditions => filter, :order => @sorted_by)
     @all_ratings = Movie.ratings()
   end
@@ -39,7 +55,7 @@ class MoviesController < ApplicationController
   def update
     @movie = Movie.find params[:id]
     @movie.update_attributes!(params[:movie])
-    flash[:notice] = "#{@movie.title} was successfully updated."
+    flas[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
   end
 

@@ -18,12 +18,12 @@ class MoviesController < ApplicationController
       filter[:rating] = @checked_ratings.keys
     end
     
-    if @checked_ratings.empty? and not (params.has_key?(:commit) and params[:commit] == 'Refresh')
+    if not (params.has_key?(:commit) and params[:commit] == 'Refresh')
       redirect_params = {}
-      if session.has_key?(:ratings) and not session[:ratings].empty?
+      if @checked_ratings.empty? and session.has_key?(:ratings) and not session[:ratings].empty?
         redirect_params[:ratings] = session[:ratings]
       end
-      if session.has_key?(:sort_by) and not session[:sort_by] == ''
+      if @sorted_by.empty? and session.has_key?(:sort_by) and not session[:sort_by] == ''
         redirect_params[:sort_by] = session[:sort_by]
       end
       if not redirect_params.empty?
